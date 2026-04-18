@@ -4,6 +4,7 @@ import ParticleSystem from "./particles.js";
 import Board from "./board.js";
 import Emitter from "./emitter.js";
 import Canon from "./canon.js";
+import Bullet from "./bullet.js";
 import LEVEL_DATA from "./level.js";
 
 class GameScene {
@@ -60,7 +61,7 @@ class GameScene {
 
     this.pawns = [];
     this.pawns.push(new Emitter(this.scene, this.board, 0, 0));
-    this.pawns.push(new Canon(this.board, 2, 5));
+    this.pawns.push(new Canon(this.scene, this.board, 2, 5));
 
     this.raycaster = new THREE.Raycaster();
     this.mouse = new THREE.Vector2(-9999, -9999);
@@ -107,6 +108,8 @@ class GameScene {
     for (let p of this.pawns) {
       p.update();
     }
+
+    Bullet.updateAll(this.scene);
 
     this.updateInput();
     this.updateHud();

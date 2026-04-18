@@ -32,9 +32,11 @@ class ParticleSystem {
     return null;
   }
 
-  burst(pos, amount, spread, speed = 1) {
+  burst(pos, amount, spread, speed = 1, color = null) {
     let e = this.getEmitter();
     if (e == null) return;
+
+    if (color !== null) e.material.color.set(color);
 
     e.scene = this.scene;
     e.init(

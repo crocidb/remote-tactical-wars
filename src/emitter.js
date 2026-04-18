@@ -38,7 +38,7 @@ class Emitter extends Pawn {
     let ring = this._getRing();
     if (ring == null) return;
 
-    ParticleSystem.instance.burst(this.mesh.position, 30, 1.9, 1.0);
+    ParticleSystem.instance.burst(this.mesh.position, 30, 1.9, 1.0, 0x55ffff);
 
     ring.emit(this.mesh.position.clone().add(new THREE.Vector3(0, 0.5, 0)));
     if (this.mesh) this.mesh.scale.y = 0.8;
