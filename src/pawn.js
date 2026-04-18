@@ -38,6 +38,10 @@ class Pawn {
   iscoordinate(coord) {
     return coord.x == this.x && coord.y == this.y;
   }
+
+  fire() {
+
+  }
 }
 
 export default Pawn;

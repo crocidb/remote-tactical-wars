@@ -5,6 +5,10 @@ class Canon extends Pawn {
     super(board, "/assets/canon.glb", x, z);
     this.name = "Canon";
   }
+
+  fire() {
+    console.log("FIRE");
+  }
 }
 
 export default Canon;

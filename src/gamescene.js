@@ -8,6 +8,7 @@ import LEVEL_DATA from "./level.js";
 
 class GameScene {
   constructor(canvas) {
+    this.canvas = canvas;
     this.scene = new THREE.Scene();
     this.scene.background = new THREE.Color(0x1a1a1a);
     ParticleSystem.instance.init(this.scene);
@@ -63,11 +64,14 @@ class GameScene {
 
     this.raycaster = new THREE.Raycaster();
     this.mouse = new THREE.Vector2(-9999, -9999);
+
     window.addEventListener("mousemove", (e) => {
       const rect = canvas.getBoundingClientRect();
       this.mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
       this.mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
     });
+
+    window.addEventListener("click", this._click.bind(this));
   }
 
   _fitCameraToBoard(boardWidth, boardHeight) {
@@ -80,6 +84,16 @@ class GameScene {
     const D = Math.max(distForWidth, distForDepth) * 1.1;
     this.camera.position.set(0, D / Math.SQRT2, -D / Math.SQRT2);
     this.camera.lookAt(0, 0, 0);
+  }
+
+  _click(e) {
+    const rect = this.canvas.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+    const y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+
+    if (this.currentSelected) {
+      this.currentSelected.fire();
+    }
   }
 
   update() {

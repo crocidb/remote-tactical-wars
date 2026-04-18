@@ -5,6 +5,10 @@ class Emitter extends Pawn {
     super(board, "/assets/emitter.glb", x, z);
     this.name = "Emitter";
   }
+
+  fire() {
+    console.log("EMIT");
+  }
 }
 
 export default Emitter;
