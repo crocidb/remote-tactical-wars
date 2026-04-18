@@ -2,6 +2,8 @@ import * as THREE from "three";
 
 class Board {
   constructor(width, height) {
+    this.width = width;
+    this.height = height;
     this.board = new THREE.Group();
 
     const offset = {

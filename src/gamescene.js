@@ -1,10 +1,9 @@
 import * as THREE from "three";
-import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
-
 import Input from "./input.js";
 import Time from "./time.js";
 import ParticleSystem from "./particles.js";
 import Board from "./board.js";
+import Pawn from "./pawn.js";
 import LEVEL_DATA from "./level.js";
 
 class GameScene {
@@ -51,34 +50,8 @@ class GameScene {
 
     this._fitCameraToBoard(this.currentLevel.board.width, this.currentLevel.board.height);
 
-    // Load emitter model
-    const loader = new GLTFLoader();
-
-    loader.load("/assets/emitter.glb", (gltf) => {
-      this.emitter = gltf.scene;
-      this.emitter.traverse((child) => {
-        if (child.isMesh) {
-          child.castShadow = true;
-          child.receiveShadow = true;
-        }
-      });
-      this.emitter.position.set(0, .55, -2.5);
-      this.emitter.scale.set(.6,.6,.6);
-      this.scene.add(this.emitter);
-    });
-
-    loader.load("/assets/canon.glb", (gltf) => {
-      this.canon = gltf.scene;
-      this.canon.traverse((child) => {
-        if (child.isMesh) {
-          child.castShadow = true;
-          child.receiveShadow = true;
-        }
-      });
-      this.canon.position.set(0, .55, .5);
-      this.canon.scale.set(.6,.6,.6);
-      this.scene.add(this.canon);
-    });
+    this.emitter = new Pawn(this.board, "/assets/emitter.glb", 2, 2);
+    this.canon = new Pawn(this.board, "/assets/canon.glb", 2, 5);
   }
 
   _fitCameraToBoard(boardWidth, boardHeight) {
