@@ -28,6 +28,7 @@ class Emitter extends Pawn {
 
     this.initialScaleY = 0.6;
     this.rateCounter = 0;
+    this.flashIntensity = 0;
   }
 
   _getRing() {
@@ -49,6 +50,7 @@ class Emitter extends Pawn {
       ParticleSystem.instance.burst(this.mesh.position, 30, 1.9, 1.0, 0x55ffff);
       ring.emit(this.mesh.position.clone().add(new THREE.Vector3(0, 0.5, 0)));
       this.mesh.scale.y = 0.8;
+      this.flashIntensity = 0.4;
     }
   }
 
@@ -63,12 +65,16 @@ class Emitter extends Pawn {
       this.emit();
     }
 
-    if (this.mesh)
-      this.mesh.scale.y = utils.lerp(
-        this.mesh.scale.y,
-        this.initialScaleY,
-        0.2,
-      );
+    if (this.mesh) {
+      this.mesh.scale.y = utils.lerp(this.mesh.scale.y, this.initialScaleY, 0.2);
+
+      this.flashIntensity = utils.lerp(this.flashIntensity, 0, 0.08);
+      this.mesh.traverse((child) => {
+        if (child.isMesh && child.material) {
+          child.material.emissive = new THREE.Color(0, this.flashIntensity, this.flashIntensity);
+        }
+      });
+    }
   }
 }
 

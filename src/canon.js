@@ -13,6 +13,7 @@ class Canon extends Pawn {
     this.name = "Canon";
 
     this.initialScaleY = 0.6;
+    this.flashIntensity = 0;
   }
 
   action() {
@@ -29,18 +30,24 @@ class Canon extends Pawn {
     const velocity = new THREE.Vector3(0, 0, 6);
     if (this.mesh) this.mesh.scale.y = 0.5;
 
+    this.flashIntensity = 0.5;
+
     ParticleSystem.instance.burst(this.mesh.position.clone().add(new THREE.Vector3(0, 0, .6)), 30, .7, 1.0, 0xffaa55);
 
     Bullet.get(this.scene, worldPos, velocity, 0.1, 3.0, this);
   }
 
   _update() {
-    if (this.mesh)
-      this.mesh.scale.y = utils.lerp(
-        this.mesh.scale.y,
-        this.initialScaleY,
-        0.2,
-      );
+    if (!this.mesh) return;
+
+    this.mesh.scale.y = utils.lerp(this.mesh.scale.y, this.initialScaleY, 0.2);
+
+    this.flashIntensity = utils.lerp(this.flashIntensity, 0, 0.1);
+    this.mesh.traverse((child) => {
+      if (child.isMesh && child.material) {
+        child.material.emissive = new THREE.Color(this.flashIntensity, this.flashIntensity, this.flashIntensity * .8);
+      }
+    });
   }
 }
 
