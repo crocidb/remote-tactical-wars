@@ -7,7 +7,7 @@ import Pawn from "./pawn.js";
 import LEVEL_DATA from "./level.js";
 
 class GameScene {
-  constructor() {
+  constructor(canvas) {
     this.scene = new THREE.Scene();
     this.scene.background = new THREE.Color(0x1a1a1a);
     ParticleSystem.instance.init(this.scene);
@@ -52,6 +52,14 @@ class GameScene {
 
     this.emitter = new Pawn(this.board, "/assets/emitter.glb", 2, 2);
     this.canon = new Pawn(this.board, "/assets/canon.glb", 2, 5);
+
+    this.raycaster = new THREE.Raycaster();
+    this.mouse = new THREE.Vector2(-9999, -9999);
+    window.addEventListener("mousemove", (e) => {
+      const rect = canvas.getBoundingClientRect();
+      this.mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+      this.mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+    });
   }
 
   _fitCameraToBoard(boardWidth, boardHeight) {
@@ -69,6 +77,10 @@ class GameScene {
     if (Input.instance.iskeydown(Input.SPACE)) {
       ParticleSystem.instance.burst(new THREE.Vector3(0,0,0), 80, 2.0, 1.0);
     }
+
+    this.raycaster.setFromCamera(this.mouse, this.camera);
+    const hits = this.raycaster.intersectObjects(this.board.squares);
+    this.board.setHovered(hits.length > 0 ? hits[0].object : null);
   }
 }
 

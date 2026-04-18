@@ -32,7 +32,7 @@ class System {
   }
 
   start() {
-    this.currentScene = new GameScene();
+    this.currentScene = new GameScene(this.renderer.domElement);
     this.resize();
     this.update();
   }

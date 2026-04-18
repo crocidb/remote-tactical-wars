@@ -5,6 +5,7 @@ class Board {
     this.width = width;
     this.height = height;
     this.board = new THREE.Group();
+    this.squares = [];
 
     const offset = {
       x: (width - 1) / 2,
@@ -27,7 +28,30 @@ class Board {
         mesh.position.set(x - offset.x, -0.05, z - offset.z);
         mesh.receiveShadow = true;
         this.board.add(mesh);
+        this.squares.push(mesh);
       }
+    }
+
+    const hoverGeo = new THREE.BoxGeometry(1.0, 0.01, 1.0);
+    const hoverMat = new THREE.MeshBasicMaterial({
+      color: 0xff9999,
+      transparent: true,
+      opacity: 0.3,
+      depthWrite: false,
+    });
+    this.hoverIndicator = new THREE.Mesh(hoverGeo, hoverMat);
+    this.hoverIndicator.visible = false;
+    this.hoverIndicator.position.y = 0.005;
+    this.board.add(this.hoverIndicator);
+  }
+
+  setHovered(square) {
+    if (square) {
+      this.hoverIndicator.visible = true;
+      this.hoverIndicator.position.x = square.position.x;
+      this.hoverIndicator.position.z = square.position.z;
+    } else {
+      this.hoverIndicator.visible = false;
     }
   }
 }
