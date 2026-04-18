@@ -1,6 +1,6 @@
 const LEVEL_DATA = [
   {
-    name: "Level 0",
+    name: "Level 0 - Tutorial",
     board: {width: 5, height: 10},
     canons: [
       {x: 1, y: 4},

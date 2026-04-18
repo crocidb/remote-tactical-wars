@@ -1,6 +1,7 @@
 import * as THREE from "three";
 
 import Pawn from "./pawn.js";
+import Time from "./time.js";
 import Bullet from "./bullet.js";
 import ParticleSystem from "./particles.js"
 
@@ -11,6 +12,7 @@ class Canon extends Pawn {
     super(board, "/assets/canon.glb", x, z);
     this.scene = scene;
     this.name = "Canon";
+    this.description = "Click to deactivate";
 
     this.initialScaleY = 0.6;
     this.flashIntensity = 0;
@@ -40,9 +42,9 @@ class Canon extends Pawn {
   _update() {
     if (!this.mesh) return;
 
-    this.mesh.scale.y = utils.lerp(this.mesh.scale.y, this.initialScaleY, 0.2);
+    this.mesh.scale.y = utils.lerp(this.mesh.scale.y, this.initialScaleY, Time.instance.dt() * 9.0);
 
-    this.flashIntensity = utils.lerp(this.flashIntensity, 0, 0.1);
+    this.flashIntensity = utils.lerp(this.flashIntensity, 0, Time.instance.dt() * 9.0);
     this.mesh.traverse((child) => {
       if (child.isMesh && child.material) {
         child.material.emissive = new THREE.Color(this.flashIntensity, this.flashIntensity, this.flashIntensity * .8);

@@ -11,6 +11,7 @@ class Emitter extends Pawn {
   constructor(scene, board, x, y, type, rate) {
     super(board, "/assets/emitter.glb", x, y);
     this.name = "Emitter";
+    this.description = "";
     this.type = type;
     this.rate = rate;
 
@@ -66,9 +67,9 @@ class Emitter extends Pawn {
     }
 
     if (this.mesh) {
-      this.mesh.scale.y = utils.lerp(this.mesh.scale.y, this.initialScaleY, 0.2);
+      this.mesh.scale.y = utils.lerp(this.mesh.scale.y, this.initialScaleY, Time.instance.dt() * 9.0);
 
-      this.flashIntensity = utils.lerp(this.flashIntensity, 0, 0.08);
+      this.flashIntensity = utils.lerp(this.flashIntensity, 0, Time.instance.dt() * 10.0);
       this.mesh.traverse((child) => {
         if (child.isMesh && child.material) {
           child.material.emissive = new THREE.Color(0, this.flashIntensity, this.flashIntensity);

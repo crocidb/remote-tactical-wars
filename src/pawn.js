@@ -6,6 +6,7 @@ class Pawn {
     this.x = x;
     this.y = y;
     this.name = "";
+    this.description = "";
     this.mesh = null;
 
     const loader = new GLTFLoader();

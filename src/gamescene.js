@@ -18,7 +18,11 @@ class GameScene {
     this.currentSelected = null;
 
     // HUD
+    this.hudLevelTitle = document.querySelector("#hud_level_title h1");
     this.hudSelectionTitle = document.querySelector("#hud_selection h1");
+    this.hudSelectionDescription = document.querySelector("#hud_selection p");
+
+    this.hudLevelTitle.innerHTML = this.currentLevel.name;
 
     // CAMERA
     this.camera = new THREE.PerspectiveCamera(
@@ -152,8 +156,10 @@ class GameScene {
 
   updateHud() {
     this.hudSelectionTitle.innerHTML = "Empty Square";
+    this.hudSelectionDescription.innerHTML = "";
     if (this.currentSelected != null) {
       this.hudSelectionTitle.innerHTML = this.currentSelected.name;
+      this.hudSelectionDescription.innerHTML = this.currentSelected.description;
     }
   }
 }
