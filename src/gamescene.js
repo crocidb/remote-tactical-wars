@@ -1,5 +1,7 @@
 import * as THREE from "three";
 
+import Input from "./input.js"
+
 class GameScene {
   constructor() {
     this.scene = new THREE.Scene();
@@ -43,6 +45,12 @@ class GameScene {
     );
     obj.position.set(0, 0, 0);
     this.scene.add(obj);
+  }
+
+  update() {
+    if (Input.instance.iskeydown(Input.SPACE)) {
+      console.dir("SPACE PRESSD");
+    }
   }
 }
 
