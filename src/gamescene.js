@@ -17,12 +17,11 @@ class GameScene {
 
     // CAMERA
     this.camera = new THREE.PerspectiveCamera(
-      45,
+      40,
       window.innerWidth / window.innerHeight,
       0.1,
       100,
     );
-    this.camera.position.set(0, 8, -8);
     this.camera.lookAt(0, 0, 0);
 
     // LIGHT
@@ -49,6 +48,8 @@ class GameScene {
       this.currentLevel.board.height,
     );
     this.scene.add(this.board.board);
+
+    this._fitCameraToBoard(this.currentLevel.board.width, this.currentLevel.board.height);
 
     // Load emitter model
     const loader = new GLTFLoader();
@@ -78,6 +79,17 @@ class GameScene {
       this.canon.scale.set(.6,.6,.6);
       this.scene.add(this.canon);
     });
+  }
+
+  _fitCameraToBoard(boardWidth, boardHeight) {
+    const vFov = THREE.MathUtils.degToRad(this.camera.fov);
+    const hFov = 2 * Math.atan(Math.tan(vFov / 2) * this.camera.aspect);
+    const halfCamZ = boardHeight / (2 * Math.SQRT2);
+    const distForWidth = (boardWidth / 2) / Math.tan(hFov / 2) + halfCamZ * Math.SQRT2;
+    const distForDepth = halfCamZ / Math.tan(vFov / 2) + halfCamZ * Math.SQRT2;
+    const D = Math.max(distForWidth, distForDepth) * 1.1;
+    this.camera.position.set(0, D / Math.SQRT2, -D / Math.SQRT2);
+    this.camera.lookAt(0, 0, 0);
   }
 
   update() {
