@@ -15,6 +15,10 @@ class Canon extends Pawn {
     this.initialScaleY = 0.6;
   }
 
+  action() {
+
+  }
+
   fire() {
     if (!this.mesh) return;
 

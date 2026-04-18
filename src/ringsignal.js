@@ -30,6 +30,7 @@ class RingSignal {
 
     this.line = new Line2(this.geometry, this.material);
     this.line.visible = false;
+    this.triggered = new Set();
   }
 
   emit(origin) {
@@ -38,6 +39,7 @@ class RingSignal {
     this.material.opacity = 1.0;
     this.line.visible = true;
     this.active = true;
+    this.triggered.clear();
     this._updatePoints();
     this.scene.add(this.line);
   }

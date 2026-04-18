@@ -1,15 +1,18 @@
 import * as THREE from "three";
 
 import Pawn from "./pawn.js";
+import Time from "./time.js";
 import RingSignal from "./ringsignal.js";
-import ParticleSystem from "./particles.js"
+import ParticleSystem from "./particles.js";
 
 import * as utils from "./utils.js";
 
 class Emitter extends Pawn {
-  constructor(scene, board, x, z) {
-    super(board, "/assets/emitter.glb", x, z);
+  constructor(scene, board, x, y, type, rate) {
+    super(board, "/assets/emitter.glb", x, y);
     this.name = "Emitter";
+    this.type = type;
+    this.rate = rate;
 
     this.rings = [];
     for (let i = 0; i < 3; i++) {
@@ -24,6 +27,7 @@ class Emitter extends Pawn {
     }
 
     this.initialScaleY = 0.6;
+    this.rateCounter = 0;
   }
 
   _getRing() {
@@ -34,19 +38,29 @@ class Emitter extends Pawn {
     return null;
   }
 
-  fire() {
+  action() {
+  }
+
+  emit() {
     let ring = this._getRing();
     if (ring == null) return;
 
-    ParticleSystem.instance.burst(this.mesh.position, 30, 1.9, 1.0, 0x55ffff);
-
-    ring.emit(this.mesh.position.clone().add(new THREE.Vector3(0, 0.5, 0)));
-    if (this.mesh) this.mesh.scale.y = 0.8;
+    if (this.mesh != null) {
+      ParticleSystem.instance.burst(this.mesh.position, 30, 1.9, 1.0, 0x55ffff);
+      ring.emit(this.mesh.position.clone().add(new THREE.Vector3(0, 0.5, 0)));
+      this.mesh.scale.y = 0.8;
+    }
   }
 
   _update() {
     for (let ring of this.rings) {
       ring.update();
+    }
+
+    this.rateCounter += Time.instance.dt();
+    if (this.rateCounter >= this.rate) {
+      this.rateCounter = 0;
+      this.emit();
     }
 
     if (this.mesh)

@@ -39,7 +39,7 @@ class Pawn {
     return coord.x == this.x && coord.y == this.y;
   }
 
-  fire() {
+  action() {
 
   }
 

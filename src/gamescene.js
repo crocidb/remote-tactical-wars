@@ -61,7 +61,7 @@ class GameScene {
 
     this.pawns = [];
     for (const e of this.currentLevel.emitters) {
-      this.pawns.push(new Emitter(this.scene, this.board, e.x, e.y));
+      this.pawns.push(new Emitter(this.scene, this.board, e.x, e.y, e.type, e.rate));
     }
     for (const c of this.currentLevel.canons) {
       this.pawns.push(new Canon(this.scene, this.board, c.x, c.y));
@@ -97,7 +97,7 @@ class GameScene {
     // const y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
 
     if (this.currentSelected) {
-      this.currentSelected.fire();
+      this.currentSelected.action();
     }
   }
 
@@ -111,6 +111,25 @@ class GameScene {
 
     for (let p of this.pawns) {
       p.update();
+    }
+
+    const emitters = this.pawns.filter(p => p instanceof Emitter);
+    const canons = this.pawns.filter(p => p instanceof Canon);
+    for (const emitter of emitters) {
+      for (const ring of emitter.rings) {
+        if (!ring.active) continue;
+        for (const canon of canons) {
+          if (!canon.mesh) continue;
+          if (ring.triggered.has(canon)) continue;
+          const dx = ring.origin.x - canon.mesh.position.x;
+          const dz = ring.origin.z - canon.mesh.position.z;
+          const dist = Math.sqrt(dx * dx + dz * dz);
+          if (ring.radius >= dist) {
+            ring.triggered.add(canon);
+            canon.fire();
+          }
+        }
+      }
     }
 
     Bullet.updateAll(this.scene);
