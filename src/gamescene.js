@@ -3,7 +3,8 @@ import Input from "./input.js";
 import Time from "./time.js";
 import ParticleSystem from "./particles.js";
 import Board from "./board.js";
-import Pawn from "./pawn.js";
+import Emitter from "./emitter.js";
+import Canon from "./canon.js";
 import LEVEL_DATA from "./level.js";
 
 class GameScene {
@@ -50,8 +51,8 @@ class GameScene {
 
     this._fitCameraToBoard(this.currentLevel.board.width, this.currentLevel.board.height);
 
-    this.emitter = new Pawn(this.board, "/assets/emitter.glb", 2, 2);
-    this.canon = new Pawn(this.board, "/assets/canon.glb", 2, 5);
+    this.emitter = new Emitter(this.board, 2, 2);
+    this.canon = new Canon(this.board, 2, 5);
 
     this.raycaster = new THREE.Raycaster();
     this.mouse = new THREE.Vector2(-9999, -9999);
