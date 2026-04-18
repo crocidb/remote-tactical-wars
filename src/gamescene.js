@@ -1,9 +1,10 @@
 import * as THREE from "three";
 
-import Input from "./input.js"
-import ParticleSystem from "./particles.js"
-import Board from "./board.js"
-import LEVEL_DATA from "./level.js"
+import Input from "./input.js";
+import Time from "./time.js";
+import ParticleSystem from "./particles.js";
+import Board from "./board.js";
+import LEVEL_DATA from "./level.js";
 
 class GameScene {
   constructor() {
@@ -20,7 +21,7 @@ class GameScene {
       0.1,
       100,
     );
-    this.camera.position.set(0, 5, -10);
+    this.camera.position.set(0, 8, -8);
     this.camera.lookAt(0, 0, 0);
 
     // LIGHT
@@ -42,11 +43,14 @@ class GameScene {
     this.scene.add(this.sun);
 
     // BOARD
-    this.board = new Board(this.currentLevel.board.width, this.currentLevel.board.height);
+    this.board = new Board(
+      this.currentLevel.board.width,
+      this.currentLevel.board.height,
+    );
     this.scene.add(this.board.board);
 
     // Test object
-    const obj = new THREE.Mesh(
+    this.obj = new THREE.Mesh(
       new THREE.BoxGeometry(0.7, 0.7, 0.7),
       new THREE.MeshStandardMaterial({
         color: 0xc0392b,
@@ -54,13 +58,16 @@ class GameScene {
         metalness: 0.1,
       }),
     );
-    obj.position.set(0, 0, 0);
-    this.scene.add(obj);
+    this.obj.castShadow = true;
+    this.obj.position.set(0, 0.5, 0);
+    this.scene.add(this.obj);
   }
 
   update() {
+    this.obj.position.set(0, 0.5 + ((Math.sin(Time.instance.totalTime * 3.2) * .4) + 1.0) / 2, 0);
+
     if (Input.instance.iskeydown(Input.SPACE)) {
-      ParticleSystem.instance.burst(new THREE.Vector3(0,0,0), 80, 2.0, 1.0);
+      ParticleSystem.instance.burst(this.obj.position, 80, 2.0, 1.0);
     }
   }
 }
