@@ -1,6 +1,5 @@
 import * as THREE from "three";
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-
+import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 
 import Input from "./input.js";
 import Time from "./time.js";
@@ -51,19 +50,6 @@ class GameScene {
     );
     this.scene.add(this.board.board);
 
-    // Test object
-    this.obj = new THREE.Mesh(
-      new THREE.BoxGeometry(0.7, 0.7, 0.7),
-      new THREE.MeshStandardMaterial({
-        color: 0xc0392b,
-        roughness: 0.4,
-        metalness: 0.1,
-      }),
-    );
-    this.obj.castShadow = true;
-    this.obj.position.set(0, 0.5, 0);
-    this.scene.add(this.obj);
-
     // Load emitter model
     const loader = new GLTFLoader();
 
@@ -75,11 +61,12 @@ class GameScene {
           child.receiveShadow = true;
         }
       });
-      this.emitter.position.set(0, 1, 0);
+      this.emitter.position.set(0, .55, -2.5);
+      this.emitter.scale.set(.6,.6,.6);
       this.scene.add(this.emitter);
     });
 
-      loader.load("/assets/canon.glb", (gltf) => {
+    loader.load("/assets/canon.glb", (gltf) => {
       this.canon = gltf.scene;
       this.canon.traverse((child) => {
         if (child.isMesh) {
@@ -87,18 +74,15 @@ class GameScene {
           child.receiveShadow = true;
         }
       });
-      this.canon.position.set(2, 1, 0);
+      this.canon.position.set(0, .55, .5);
+      this.canon.scale.set(.6,.6,.6);
       this.scene.add(this.canon);
     });
-
-
   }
 
   update() {
-    this.obj.position.set(0, 0.5 + ((Math.sin(Time.instance.totalTime * 3.2) * .4) + 1.0) / 2, 0);
-
     if (Input.instance.iskeydown(Input.SPACE)) {
-      ParticleSystem.instance.burst(this.obj.position, 80, 2.0, 1.0);
+      ParticleSystem.instance.burst(new THREE.Vector3(0,0,0), 80, 2.0, 1.0);
     }
   }
 }
