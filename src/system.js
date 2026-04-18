@@ -1,4 +1,11 @@
 import * as THREE from 'three';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
+import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+import { SMAAPass } from 'three/addons/postprocessing/SMAAPass.js';
+import CRTShader from './crtshader.js';
 
 import GameScene from "./gamescene.js"
 import Time from "./time.js"
@@ -29,11 +36,29 @@ class System {
       this.currentScene.camera.aspect = w / h;
       this.currentScene.camera.updateProjectionMatrix();
     }
+    if (this.composer) this.composer.setSize(w, h);
+    if (this.crtPass) this.crtPass.uniforms.resolution.value.set(w, h);
   }
 
   start() {
     this.currentScene = new GameScene(this.renderer.domElement);
     this.resize();
+
+    const { scene, camera } = this.currentScene;
+    const { clientWidth: w, clientHeight: h } = this.div;
+
+    const renderPass = new RenderPass(scene, camera);
+    const bloomPass = new UnrealBloomPass(new THREE.Vector2(w, h), 0.15, 0.2, 0.3);
+    this.crtPass = new ShaderPass(CRTShader);
+    this.crtPass.uniforms.resolution.value.set(w, h);
+
+    this.composer = new EffectComposer(this.renderer);
+    this.composer.addPass(renderPass);
+    this.composer.addPass(new SMAAPass(w, h));
+    this.composer.addPass(bloomPass);
+    this.composer.addPass(this.crtPass);
+    this.composer.addPass(new OutputPass());
+
     this.update();
   }
 
@@ -43,7 +68,8 @@ class System {
 
     this.currentScene.update();
 
-    this.renderer.render(this.currentScene.scene, this.currentScene.camera);
+    this.crtPass.uniforms.time.value = Time.instance.total;
+    this.composer.render();
     requestAnimationFrame(this.update.bind(this));
     Input.instance.update();
   }

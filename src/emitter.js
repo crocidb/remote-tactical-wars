@@ -16,7 +16,7 @@ class Emitter extends Pawn {
           minRadius: 0.05,
           maxRadius: 10.0,
           speed: 5.5,
-          color: 0x00ffff,
+          color: 0x55ffff,
         }),
       );
     }

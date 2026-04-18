@@ -36,9 +36,9 @@ class Board {
 
     const hoverGeo = new THREE.BoxGeometry(1.0, 0.01, 1.0);
     const hoverMat = new THREE.MeshBasicMaterial({
-      color: 0xff9999,
+      color: 0xffaaaa,
       transparent: true,
-      opacity: 0.3,
+      opacity: 0.9,
       depthWrite: false,
     });
     this.hoverIndicator = new THREE.Mesh(hoverGeo, hoverMat);
