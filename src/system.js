@@ -9,16 +9,31 @@ class System {
   constructor() {
     Input.instance.update();
 
+    this.div = document.getElementById("gamediv");
+
     this.renderer = new THREE.WebGLRenderer({ antialias: true });
-    this.renderer.setPixelRatio(window.devicePixelRatio);
-    this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = THREE.PCFShadowMap;
-    document.body.appendChild(this.renderer.domElement);
+
+    this.div.appendChild(this.renderer.domElement);
+    this.resize();
+
+    window.addEventListener("resize", this.resize.bind(this));
+  }
+
+  resize() {
+    const w = this.div.clientWidth;
+    const h = this.div.clientHeight;
+    this.renderer.setSize(w, h, true);
+    if (this.currentScene && this.currentScene.camera) {
+      this.currentScene.camera.aspect = w / h;
+      this.currentScene.camera.updateProjectionMatrix();
+    }
   }
 
   start() {
     this.currentScene = new GameScene();
+    this.resize();
     this.update();
   }
 

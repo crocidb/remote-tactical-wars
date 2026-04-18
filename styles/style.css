@@ -3,8 +3,16 @@ html, body {
   height: 100%;
   background: #111;
   overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 canvas {
   display: block;
+}
+
+#gamediv {
+  width: 1280px;
+  height: 768px;
 }
