@@ -1,11 +1,13 @@
 import * as THREE from "three";
 
 import Input from "./input.js"
+import ParticleSystem from "./particles.js"
 
 class GameScene {
   constructor() {
     this.scene = new THREE.Scene();
     this.scene.background = new THREE.Color(0x1a1a1a);
+    ParticleSystem.instance.init(this.scene);
 
     this.camera = new THREE.PerspectiveCamera(
       45,
@@ -49,7 +51,7 @@ class GameScene {
 
   update() {
     if (Input.instance.iskeydown(Input.SPACE)) {
-      console.dir("SPACE PRESSD");
+      ParticleSystem.instance.burst(new THREE.Vector3(0,0,0), 80, 2.0, 1.0);
     }
   }
 }

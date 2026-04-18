@@ -3,6 +3,7 @@ import * as THREE from 'three';
 import GameScene from "./gamescene.js"
 import Time from "./time.js"
 import Input from "./input.js"
+import ParticleSystem from "./particles.js"
 
 class System {
   constructor() {
@@ -22,7 +23,8 @@ class System {
   }
 
   update() {
-    Time.update();
+    Time.instance.update();
+    ParticleSystem.instance.update();
 
     this.currentScene.update();
 

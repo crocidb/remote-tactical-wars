@@ -28,6 +28,7 @@ const shuffleArray = (array) => {
 
 // Randoms
 const randnum = (v = 1) => Math.random() * v;
+const randrange = (n1, n2) => n1 + randnum(n2 - n1);
 const randint = (v) => Math.round(randnum(v));
 const randsig = () => (randint(10) % 2 == 0 ? 1 : -1);
 const randweight = (c, p) => {
@@ -74,3 +75,5 @@ const playaudio = (a) => {
     sound.play();
   }
 };
+
+export { repltxt, clamp, clamp01, lerp, smoothstep, rangeArray, shuffleArray, randnum, randrange, randint, randsig, randweight, randweightsqrd, co, mobile, AUDIO, AUDIO_VOLUME, SFX_VOLUME, playaudiodelay, playaudio };
