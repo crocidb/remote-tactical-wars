@@ -59,7 +59,7 @@ class GameScene {
     );
 
     this.pawns = [];
-    this.pawns.push(new Emitter(this.board, 0, 0));
+    this.pawns.push(new Emitter(this.scene, this.board, 0, 0));
     this.pawns.push(new Canon(this.board, 2, 5));
 
     this.raycaster = new THREE.Raycaster();
@@ -103,6 +103,10 @@ class GameScene {
 
     this.raycaster.setFromCamera(this.mouse, this.camera);
     this.board.update(this.raycaster);
+
+    for (let p of this.pawns) {
+      p.update();
+    }
 
     this.updateInput();
     this.updateHud();

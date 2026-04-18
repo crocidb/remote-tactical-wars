@@ -26,7 +26,7 @@ class Pawn {
   _applyPosition() {
     const offsetX = (this.board.width - 1) / 2;
     const offsetY = (this.board.height - 1) / 2;
-    this.mesh.position.set((this.board.width - 1 - this.x) - offsetX, 0.6, this.y - offsetY);
+    this.mesh.position.set((this.board.width - 1 - this.x) - offsetX, 0, this.y - offsetY);
   }
 
   moveTo(x, y) {
@@ -41,6 +41,14 @@ class Pawn {
 
   fire() {
 
+  }
+
+  _update() {
+
+  }
+
+  update() {
+    this._update();
   }
 }
 
