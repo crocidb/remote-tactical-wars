@@ -60,8 +60,12 @@ class GameScene {
     );
 
     this.pawns = [];
-    this.pawns.push(new Emitter(this.scene, this.board, 0, 0));
-    this.pawns.push(new Canon(this.scene, this.board, 2, 5));
+    for (const e of this.currentLevel.emitters) {
+      this.pawns.push(new Emitter(this.scene, this.board, e.x, e.y));
+    }
+    for (const c of this.currentLevel.canons) {
+      this.pawns.push(new Canon(this.scene, this.board, c.x, c.y));
+    }
 
     this.raycaster = new THREE.Raycaster();
     this.mouse = new THREE.Vector2(-9999, -9999);
@@ -88,9 +92,9 @@ class GameScene {
   }
 
   _click(e) {
-    const rect = this.canvas.getBoundingClientRect();
-    const x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-    const y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+    // const rect = this.canvas.getBoundingClientRect();
+    // const x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+    // const y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
 
     if (this.currentSelected) {
       this.currentSelected.fire();
