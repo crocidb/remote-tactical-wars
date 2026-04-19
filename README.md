@@ -14,3 +14,5 @@ This game uses some icons from [Game-icons.net](https://game-icons.net). Here ar
  - Move icon Move icon by Delapouite under CC BY 3.0by Delapouite under CC BY 3.0
  - Cannon shot icon by Lorc under CC BY 3.0
  - Cycle icon by Lorc under CC BY 3.0
+ - Play button icon by Guard13007 under CC BY 3.0
+ - Help icon by sbed under CC BY 3.0

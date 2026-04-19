@@ -67,7 +67,7 @@ class System {
     Time.instance.update();
     ParticleSystem.instance.update();
 
-    this.currentScene.update();
+    if (!this.currentScene.paused) this.currentScene.update();
 
     this.crtPass.uniforms.time.value = Time.instance.total;
     this.composer.render();

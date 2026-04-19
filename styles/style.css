@@ -52,6 +52,67 @@ canvas {
   color: #eeeed2;
 }
 
+#hud_controls {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 4px;
+  pointer-events: auto;
+}
+
+.control-btn {
+  background: rgba(118, 150, 86, 0.2);
+  border: 1px solid rgba(238, 238, 210, 0.3);
+  border-radius: 6px;
+  padding: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+}
+
+.control-btn:hover {
+  background: rgba(118, 150, 86, 0.45);
+}
+
+.control-btn img {
+  width: 28px;
+  height: 28px;
+  display: block;
+}
+
+#hud_help {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(26, 26, 26, 0.92);
+  border: 1px solid rgba(238, 238, 210, 0.3);
+  border-radius: 10px;
+  padding: 28px 36px;
+  pointer-events: auto;
+  color: #eeeed2;
+  min-width: 320px;
+}
+
+#hud_help h2 {
+  font-size: 1.5rem;
+  margin: 0 0 14px 0;
+  text-align: center;
+}
+
+#hud_help ul {
+  margin: 0;
+  padding-left: 20px;
+  font-size: 1rem;
+  line-height: 1.8;
+}
+
+#hud_help.hidden {
+  display: none;
+}
+
 #hud_selection {
   margin-right: 10px;
   margin-bottom: 10px;

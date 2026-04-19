@@ -18,13 +18,19 @@ class GameScene {
 
     this.currentLevel = LEVEL_DATA[0];
     this.currentSelected = null;
+    this.paused = false;
+    this._helpVisible = false;
 
     // HUD
     this.hudLevelTitle = document.querySelector("#hud_level_title h1");
     this.hudSelectionTitle = document.querySelector("#hud_selection h1");
     this.hudSelectionDescription = document.querySelector("#hud_selection p");
+    this._btnPlayPause = document.getElementById("btn_playpause");
+    this._btnHelp = document.getElementById("btn_help");
+    this._hudHelp = document.getElementById("hud_help");
 
     this.hudLevelTitle.innerHTML = this.currentLevel.name;
+    this._setupControls();
 
     // CAMERA
     this.camera = new THREE.PerspectiveCamera(
@@ -143,6 +149,59 @@ class GameScene {
     } else {
       this.camera.position.copy(this._cameraBasePosition);
     }
+  }
+
+  _setupControls() {
+    this._btnPlayPause.addEventListener("click", () => this._togglePause());
+    document.getElementById("btn_restart").addEventListener("click", () => this.reset());
+    this._btnHelp.addEventListener("click", () => this._toggleHelp());
+  }
+
+  _togglePause() {
+    this.paused = !this.paused;
+    const img = this._btnPlayPause.querySelector("img");
+    img.src = this.paused ? "assets/sprites/play-button.svg" : "assets/sprites/pause-button.svg";
+    img.alt = this.paused ? "Play" : "Pause";
+    this._btnPlayPause.title = this.paused ? "Play" : "Pause";
+  }
+
+  _toggleHelp() {
+    this._helpVisible = !this._helpVisible;
+    this._hudHelp.classList.toggle("hidden", !this._helpVisible);
+    if (this._helpVisible && !this.paused) this._togglePause();
+    else if (!this._helpVisible && this.paused) this._togglePause();
+  }
+
+  reset() {
+    if (this._helpVisible) this._toggleHelp();
+    if (this.paused) this._togglePause();
+
+    for (const pawn of this.pawns) {
+      if (pawn.mesh) pawn.mesh.removeFromParent();
+    }
+    this.pawns = [];
+    Bullet.pool.length = 0;
+    ParticleSystem.instance.init(this.scene);
+
+    this.board.board.removeFromParent();
+    this.board = new Board(this.currentLevel.board.width, this.currentLevel.board.height);
+    this.scene.add(this.board.board);
+
+    for (const e of this.currentLevel.emitters) {
+      this.pawns.push(new Emitter(this.scene, this.board, e.x, e.y, e.type, e.rate, this.camera));
+    }
+    for (const c of this.currentLevel.canons) {
+      this.pawns.push(new Canon(this.scene, this.board, c.x, c.y, this.camera, c.receiver ?? 1));
+    }
+    for (const c of (this.currentLevel.enemyCanons ?? [])) {
+      this.pawns.push(new EnemyCanon(this.scene, this.board, c.x, c.y, this.camera, c.receiver ?? 1, c.orientation ?? 2));
+    }
+
+    this._cameraBasePosition.copy(this.camera.position);
+    this._shakeIntensity = 0;
+    this._shakeDuration = 0;
+    this._fitCameraToBoard(this.currentLevel.board.width, this.currentLevel.board.height);
+    this.currentSelected = null;
   }
 
   _click(e) {

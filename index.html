@@ -19,6 +19,29 @@
       <div id="hud">
         <div id="hud_level_title">
           <h1>Level</h1>
+          <div id="hud_controls">
+            <button id="btn_playpause" class="control-btn" title="Play/Pause">
+              <img src="assets/sprites/pause-button.svg" alt="Pause" />
+            </button>
+            <button id="btn_restart" class="control-btn" title="Restart">
+              <img src="assets/sprites/cycle.svg" alt="Restart" />
+            </button>
+            <button id="btn_help" class="control-btn" title="Help">
+              <img src="assets/sprites/help.svg" alt="Help" />
+            </button>
+          </div>
+        </div>
+        <div id="hud_help" class="hidden">
+          <h2>How to Play</h2>
+          <ul>
+            <li>Emitters broadcast signals in expanding rings</li>
+            <li>Canons react when a matching signal reaches them</li>
+            <li><strong>Shoot</strong> — fires a bullet toward enemy canons</li>
+            <li><strong>Move</strong> — advances the canon forward</li>
+            <li><strong>Rotate</strong> — turns the canon 90°</li>
+            <li>Click a canon to cycle its signal receiver type</li>
+            <li>Destroy all enemy canons to win</li>
+          </ul>
         </div>
         <div id="hud_selection">
           <h1>Canon 10/10</h1>
