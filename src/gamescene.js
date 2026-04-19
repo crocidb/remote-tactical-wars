@@ -11,6 +11,7 @@ import Stronghold from "./stronghold.js";
 import Bullet from "./bullet.js";
 import LEVEL_DATA from "./level.js";
 import Time from "./time.js";
+import MusicManager from "./music.js";
 
 class GameScene {
   constructor(canvas, levelIndex = 0, showHelp = true) {
@@ -104,6 +105,8 @@ class GameScene {
     this.raycaster = new THREE.Raycaster();
     this.mouse = new THREE.Vector2(-9999, -9999);
     this._pawnWorldPos = new THREE.Vector3();
+
+    MusicManager.instance.init();
 
     if (showHelp) this._toggleHelp();
 
@@ -213,6 +216,7 @@ class GameScene {
     img.src = this.paused ? "assets/sprites/play-button.svg" : "assets/sprites/pause-button.svg";
     img.alt = this.paused ? "Play" : "Pause";
     this._btnPlayPause.title = this.paused ? "Play" : "Pause";
+    MusicManager.instance.muffle(this.paused);
   }
 
   _toggleHelp() {
@@ -220,6 +224,7 @@ class GameScene {
     this._hudHelp.classList.toggle("hidden", !this._helpVisible);
     if (this._helpVisible && !this.paused) this._togglePause();
     else if (!this._helpVisible && this.paused) this._togglePause();
+    MusicManager.instance.muffle(this._helpVisible);
   }
 
   _click(e) {

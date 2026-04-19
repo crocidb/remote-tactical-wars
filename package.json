@@ -5,6 +5,7 @@
     "dev": "http-server -p 8087"
   },
   "dependencies": {
+    "pizzicato": "^0.6.4",
     "three": "^0.184.0"
   },
   "devDependencies": {
