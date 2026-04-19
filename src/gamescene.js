@@ -223,7 +223,7 @@ class GameScene {
         if (pawn.mesh) {
           ParticleSystem.instance.burst(pawn.mesh.position.clone(), 180, 2.0, .1, 0xff6600);
           this.shakeCamera(0.3, 0.1);
-          this.scene.remove(pawn.mesh);
+          pawn.mesh.removeFromParent();
         }
         this.pawns.splice(i, 1);
       }
