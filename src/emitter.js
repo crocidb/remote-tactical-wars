@@ -103,7 +103,7 @@ class Emitter extends Pawn {
   }
 
   _updateEmitterVisuals() {
-    this.description = `Emitter: ${SIGNAL_LABELS[this.type]}`;
+    this.description = `<b>${SIGNAL_LABELS[this.type]}</b>`;
     this._redrawSpriteCanvas();
   }
 
@@ -134,6 +134,8 @@ class Emitter extends Pawn {
     for (let ring of this.rings) {
       ring.update();
     }
+
+    this.name = "Signal Emitter " + this.life + "/" + this.maxLife;
 
     this.rateCounter += Time.instance.dt();
     if (this.rateCounter >= this.rate) {

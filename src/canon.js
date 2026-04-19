@@ -34,7 +34,10 @@ class Canon extends Pawn {
     this.life = this.maxLife;
 
     this.initialScaleY = 0.6;
-    this._flashColor = new THREE.Color(SIGNAL_COLORS[receiverType]);
+    this.flashIntensity = 0;
+    this._flashColor = new THREE.Color(0xffffff);
+
+    this._spriteWorldPos = new THREE.Vector3();
 
     this._spriteCanvas = document.createElement("canvas");
     this._spriteCanvas.width = 64;
@@ -103,13 +106,15 @@ class Canon extends Pawn {
   }
 
   _updateReceiverVisuals() {
-    this.description = `Receiver: ${SIGNAL_LABELS[this.receiverType]}`;
-    this._flashColor = new THREE.Color(SIGNAL_COLORS[this.receiverType]);
+    this.description = `<b>${SIGNAL_LABELS[this.receiverType]}</b><br><br>Click to switch`;
     this._redrawSpriteCanvas();
   }
 
   action() {
     this.receiverType = (this.receiverType + 1) % 4;
+    this.flashIntensity = 10.0;
+    this._flashColor.set(0xffffff);
+    ParticleSystem.instance.burst(this.mesh.position.clone().add(new THREE.Vector3(0, 0, -.6)), 50, 2.0, .1, 0xffffff);
     this._updateReceiverVisuals();
   }
 
@@ -117,7 +122,7 @@ class Canon extends Pawn {
     if (!this.mesh) return;
 
     this.flashIntensity = 1.5;
-    this._flashColor.set(SIGNAL_COLORS[this.receiverType]);
+    this._flashColor.set(0xffdd44);
 
     const { dx, dy } = ORIENTATION_DELTAS[this.orientation];
     const nx = this.x + dx;
@@ -133,7 +138,7 @@ class Canon extends Pawn {
   rotate() {
     this.orientation = (this.orientation + 1) % 4;
     this.flashIntensity = 1.5;
-    this._flashColor.set(SIGNAL_COLORS[this.receiverType]);
+    this._flashColor.set(0xffdd44);
     this.mesh.scale.y = 1.2;
     if (this.mesh) this.mesh.rotation.y = ORIENTATIONS[this.orientation].rotY;
   }
@@ -159,6 +164,8 @@ class Canon extends Pawn {
   _update() {
     if (!this.mesh) return;
 
+    this.name = "Canon " + this.life + "/" + this.maxLife;
+
     if (!this._spriteAttached) {
       this.mesh.add(this.sprite);
       this.mesh.rotation.y = ORIENTATIONS[this.orientation].rotY;
@@ -171,6 +178,20 @@ class Canon extends Pawn {
     }
 
     this.mesh.scale.y = utils.lerp(this.mesh.scale.y, this.initialScaleY, Time.instance.dt() * 9.0);
+
+    this.flashIntensity = utils.lerp(this.flashIntensity, 0, Time.instance.dt() * 9.0);
+    this.mesh.traverse((child) => {
+      if (child.isMesh && child.material) {
+        child.material.emissive = this._flashColor.clone().multiplyScalar(this.flashIntensity);
+      }
+    });
+
+    if (this.camera) {
+      this.sprite.getWorldPosition(this._spriteWorldPos);
+      const dist = this.camera.position.distanceTo(this._spriteWorldPos);
+      const k = 0.06;
+      this.sprite.scale.set(dist * k, dist * k * (84 / 64), 1);
+    }
   }
 }
 

@@ -5,27 +5,31 @@ import ParticleSystem from "./particles.js";
 import Board from "./board.js";
 import Emitter from "./emitter.js";
 import Canon from "./canon.js";
+import { SIGNAL_SPRITE_SRCS } from "./pawn.js";
 import EnemyCanon from "./enemycanon.js";
 import Bullet from "./bullet.js";
 import LEVEL_DATA from "./level.js";
 import Time from "./time.js";
 
 class GameScene {
-  constructor(canvas) {
+  constructor(canvas, levelIndex = 0, showHelp = true) {
     this.canvas = canvas;
     this.scene = new THREE.Scene();
     this.scene.background = new THREE.Color(0x1a1a1a);
     ParticleSystem.instance.init(this.scene);
 
-    this.currentLevel = LEVEL_DATA[0];
+    this.currentLevel = LEVEL_DATA[levelIndex];
+    this._levelIndex = levelIndex;
     this.currentSelected = null;
     this.paused = false;
     this._helpVisible = false;
 
     // HUD
     this.hudLevelTitle = document.querySelector("#hud_level_title h1");
+    this.hudSelection = document.getElementById("hud_selection");
     this.hudSelectionTitle = document.querySelector("#hud_selection h1");
     this.hudSelectionDescription = document.querySelector("#hud_selection p");
+    this.hudSelectionIcon = document.getElementById("hud_selection_icon");
     this._btnPlayPause = document.getElementById("btn_playpause");
     this._btnHelp = document.getElementById("btn_help");
     this._hudHelp = document.getElementById("hud_help");
@@ -96,7 +100,7 @@ class GameScene {
     this.mouse = new THREE.Vector2(-9999, -9999);
     this._pawnWorldPos = new THREE.Vector3();
 
-    this._toggleHelp();
+    if (showHelp) this._toggleHelp();
 
     this._onMouseMove = (e) => {
       const rect = canvas.getBoundingClientRect();
@@ -163,7 +167,7 @@ class GameScene {
 
   _setupControls() {
     this._onPlayPause = () => this._togglePause();
-    this._onRestart = () => System.instance.setScene(() => new GameScene(this.canvas));
+    this._onRestart = () => System.instance.setScene(() => new GameScene(this.canvas, this._levelIndex, false));
     this._onHelp = () => this._toggleHelp();
 
     this._btnHelpClose = document.getElementById("btn_help_close");
@@ -280,7 +284,7 @@ class GameScene {
           this.scene.remove(bullet.mesh);
           pawn.takeDamage(1);
           this.shakeCamera(0.1, 0.01);
-          ParticleSystem.instance.burst(bullet.position.clone(), 50, 4.5, 0.07, 0xff4400);
+          ParticleSystem.instance.burst(bullet.position.clone(), 50, 4.5, -0.07, 0xff4400);
         }
       }
     }
@@ -314,11 +318,32 @@ class GameScene {
   }
 
   updateHud() {
+    if (this.board.currentSelected == null) {
+      this.hudSelection.style.display = "none";
+      return;
+    }
+    this.hudSelection.style.display = "";
     this.hudSelectionTitle.innerHTML = "Empty Square";
     this.hudSelectionDescription.innerHTML = "";
+    this.hudSelection.classList.remove("signal-type-0", "signal-type-1", "signal-type-2", "signal-type-3");
+    this.hudSelectionIcon.style.display = "none";
+
     if (this.currentSelected != null) {
       this.hudSelectionTitle.innerHTML = this.currentSelected.name;
       this.hudSelectionDescription.innerHTML = this.currentSelected.description;
+
+      let signalType = null;
+      if (this.currentSelected instanceof Emitter) {
+        signalType = this.currentSelected.type;
+      } else if (this.currentSelected instanceof Canon) {
+        signalType = this.currentSelected.receiverType;
+      }
+
+      if (signalType !== null) {
+        this.hudSelection.classList.add(`signal-type-${signalType}`);
+        this.hudSelectionIcon.src = SIGNAL_SPRITE_SRCS[signalType];
+        this.hudSelectionIcon.style.display = "";
+      }
     }
   }
 }

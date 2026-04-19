@@ -1,7 +1,7 @@
 const LEVEL_DATA = [
   {
     name: "Level 0 - Tutorial",
-    description: "Welcome to this game! Your canons always start without any signal receiver. Click on it to switch between the available receivers. Match the one that's in this level and you'll see action. <br><br>You can't control what receivers your enemies will have, but their canons will also respond to your signal emiters.",
+    description: "Welcome to <b>Remote Tactical Wars</b>! <br><br>You should destroy your enemies pieces. The canons cannot decide what to do, so they'll do what the commands they receive from the emmiter pieces. But they can receive one signal at a time. <b>Click</b> on your canon to set what signals it can receive.<br><br>Your enemies will also receive your signals, but you can't decide which signals they do.",
     board: {width: 5, height: 10},
     canons: [
       {x: 2, y: 2, receiver: 0},

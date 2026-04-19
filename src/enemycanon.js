@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import Canon from "./canon.js";
+import Pawn, { SIGNAL_LABELS, SIGNAL_COLORS, SIGNAL_BG_COLORS, signalImages } from "./pawn.js";
 
 const ENEMY_COLOR = 0xff3300;
 
@@ -14,6 +15,9 @@ class EnemyCanon extends Canon {
 
   _update() {
     super._update();
+
+    this.name = "Enemy Canon " + this.life + "/" + this.maxLife;
+
     if (this.mesh && !this._colorApplied) {
       this.mesh.traverse((child) => {
         if (child.isMesh && child.material) {
@@ -23,6 +27,11 @@ class EnemyCanon extends Canon {
       });
       this._colorApplied = true;
     }
+  }
+
+  _updateReceiverVisuals() {
+    this.description = `<b>${SIGNAL_LABELS[this.receiverType]}</b>`;
+    this._redrawSpriteCanvas();
   }
 }
 
