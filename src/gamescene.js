@@ -109,7 +109,7 @@ class GameScene {
       this.pawns.push(this._stronghold);
     }
     for (const w of (this.currentLevel.walls ?? [])) {
-      this.pawns.push(new Wall(this.board, w.x, w.y));
+      this.pawns.push(new Wall(this.board, w.x, w.y, w.orientation ?? 0));
     }
 
     this.raycaster = new THREE.Raycaster();
@@ -247,7 +247,6 @@ class GameScene {
   }
 
   _showWin() {
-    if (!this.paused) this._togglePause();
     MusicManager.instance.stop();
     if (this._isLastLevel) {
       this._hudWinMessage.innerHTML = "You completed all levels!";

@@ -47,7 +47,7 @@ class Canon extends Pawn {
     this.spriteTexture = new THREE.CanvasTexture(this._spriteCanvas);
     const mat = new THREE.SpriteMaterial({ map: this.spriteTexture, depthTest: false });
     this.sprite = new THREE.Sprite(mat);
-    this.sprite.position.set(0, -.4, 0);
+    this.sprite.position.set(0, -.1, 0);
     this.sprite.renderOrder = 999;
 
     this._iconReady = false;

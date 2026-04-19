@@ -94,7 +94,7 @@ class MenuScene {
   }
 
   _onStartClick() {
-    System.instance.setScene(() => new GameScene(System.instance.renderer.domElement, 3));
+    System.instance.setScene(() => new GameScene(System.instance.renderer.domElement, 0));
   }
 
   update() {
