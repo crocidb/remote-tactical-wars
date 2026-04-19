@@ -32,6 +32,12 @@ class MenuScene {
     document.getElementById('btn_start_game').addEventListener('click', this._onStartClick);
 
     this._menuDiv.removeAttribute('hidden');
+
+    if (MusicManager.instance.isInitialized) {
+      this._gateEl.classList.add('hidden');
+      this._panelEl.classList.remove('hidden');
+      MusicManager.instance.play();
+    }
   }
 
   _buildBoard() {

@@ -13,6 +13,7 @@ import LEVEL_DATA from "./level.js";
 import Time from "./time.js";
 import MusicManager from "./music.js";
 import * as utils from "./utils.js";
+import MenuScene from "./menuscene.js";
 
 class GameScene {
   constructor(canvas, levelIndex = 0, showHelp = true) {
@@ -155,6 +156,8 @@ class GameScene {
   _updateShake() {
     const dt = Time.instance.dt();
 
+    if (dt <= 0) return;
+
     this._shakeDuration = THREE.MathUtils.lerp(this._shakeDuration, 0, 8 * dt);
 
     if (this._shakeDuration < 0.01) {
@@ -187,14 +190,12 @@ class GameScene {
     this._btnHelpClose = document.getElementById("btn_help_close");
     this._btnNextLevel = document.getElementById("btn_next_level");
 
+    this._isLastLevel = this._levelIndex + 1 >= LEVEL_DATA.length;
     this._onNextLevel = () => {
-      const nextIndex = this._levelIndex + 1;
-      if (nextIndex < LEVEL_DATA.length) {
-        System.instance.setScene(() => new GameScene(this.canvas, nextIndex, true));
+      if (this._isLastLevel) {
+        System.instance.setScene(() => new MenuScene(this.canvas));
       } else {
-        this._hudWinMessage.innerHTML = "You completed all levels!";
-        this._btnNextLevel.innerHTML = "Play Again";
-        this._onNextLevel = () => System.instance.setScene(() => new GameScene(this.canvas, 0, true));
+        System.instance.setScene(() => new GameScene(this.canvas, this._levelIndex + 1, true));
       }
     };
 
@@ -244,6 +245,10 @@ class GameScene {
   _showWin() {
     if (!this.paused) this._togglePause();
     MusicManager.instance.stop();
+    if (this._isLastLevel) {
+      this._hudWinMessage.innerHTML = "You completed all levels!";
+      this._btnNextLevel.innerHTML = "Main Menu";
+    }
     this._hudWin.classList.remove("hidden");
   }
 

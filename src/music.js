@@ -76,6 +76,8 @@ class MusicManager {
     this._muffled = enable;
   }
 
+  get isInitialized() { return this._sound !== null; }
+
   play() {
     if (!this._sound) return;
     this.muffle(false);
