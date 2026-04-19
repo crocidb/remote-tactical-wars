@@ -7,7 +7,7 @@ import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
 import { SMAAPass } from 'three/addons/postprocessing/SMAAPass.js';
 import CRTShader from './crtshader.js';
 
-import GameScene from "./gamescene.js"
+import MenuScene from "./menuscene.js"
 import Time from "./time.js"
 import Input from "./input.js"
 import ParticleSystem from "./particles.js"
@@ -43,7 +43,7 @@ class System {
   }
 
   start() {
-    this.currentScene = new GameScene(this.renderer.domElement, 0);
+    this.currentScene = new MenuScene(this.renderer.domElement);
     this.resize();
 
     const { scene, camera } = this.currentScene;

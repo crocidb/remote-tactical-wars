@@ -1,6 +1,6 @@
 const LEVEL_DATA = [
   {
-    name: "Level 0 - Tutorial",
+    name: "Tutorial",
     description:
       "Welcome to <b>Remote Tactical Wars</b>! <br><br>You should destroy your enemy's <b>Stronghold</b>. The canons cannot decide what to do, so they'll do what the commands they receive from the emmiter pieces. But they can receive one signal at a time. <b>Click</b> on your canon to set what signals it can receive.<br><br>Your enemies will also receive your signals, but you can't decide which signals they do.",
     board: { width: 5, height: 6 },
