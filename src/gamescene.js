@@ -130,7 +130,15 @@ class GameScene {
           const dist = Math.sqrt(dx * dx + dz * dz);
           if (ring.radius >= dist) {
             ring.triggered.add(canon);
-            if (canon.receiverType === 1) canon.fire();
+            if (canon.receiverType === emitter.type) {
+              if (emitter.type === 1) {
+                canon.fire();
+              } else if (emitter.type === 2) {
+                console.log("Canon received move signal");
+              } else if (emitter.type === 3) {
+                console.log("Canon received rotate signal");
+              }
+            }
           }
         }
       }
