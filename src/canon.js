@@ -14,6 +14,13 @@ const ORIENTATIONS = [
   { rotY: Math.PI / 2,   velocity: new THREE.Vector3(6, 0, 0),  burstOffset: new THREE.Vector3( 0.6, 0, 0) },
 ];
 
+const ORIENTATION_DELTAS = [
+  { dx:  0, dy:  1 },
+  { dx:  1, dy:  0 },
+  { dx:  0, dy: -1 },
+  { dx: -1, dy:  0 },
+];
+
 class Canon extends Pawn {
   constructor(scene, board, x, z, camera, receiverType = 1, orientation = 0) {
     super(board, "/assets/canon.glb", x, z);
@@ -80,8 +87,20 @@ class Canon extends Pawn {
     this._updateReceiverVisuals();
   }
 
-  move() {
+  move(pawns) {
+    if (!this.mesh) return;
 
+    this.flashIntensity = 1.5;
+
+    const { dx, dy } = ORIENTATION_DELTAS[this.orientation];
+    const nx = this.x + dx;
+    const ny = this.y + dy;
+
+    if (nx < 0 || nx >= this.board.width || ny < 0 || ny >= this.board.height) return;
+    if (pawns && pawns.some(p => p !== this && p.x === nx && p.y === ny)) return;
+
+    this.mesh.scale.y = 1.2;
+    this.moveTo(nx, ny);
   }
 
   rotate() {

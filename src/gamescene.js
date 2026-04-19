@@ -134,7 +134,7 @@ class GameScene {
               if (emitter.type === 1) {
                 canon.fire();
               } else if (emitter.type === 2) {
-                canon.move();
+                canon.move(this.pawns);
               } else if (emitter.type === 3) {
                 canon.rotate();
               }
