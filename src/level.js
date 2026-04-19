@@ -8,7 +8,9 @@ const LEVEL_DATA = [
       {x: 2, y: 2, receiver: 0},
     ],
     emitters: [
-      { x: 2, y: 0, type: 0, rate: 1.5 },
+      { x: 1, y: 0, type: 1, rate: 1.5 },
+      { x: 2, y: 0, type: 2, rate: 2.5 },
+      { x: 3, y: 0, type: 3, rate: 3.5 },
     ]
   }
 ];

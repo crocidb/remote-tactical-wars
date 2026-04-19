@@ -1,30 +1,11 @@
 import * as THREE from "three";
 
-import Pawn from "./pawn.js";
+import Pawn, { SIGNAL_LABELS, SIGNAL_BG_COLORS, signalImages } from "./pawn.js";
 import Time from "./time.js";
 import Bullet from "./bullet.js";
 import ParticleSystem from "./particles.js"
 
 import * as utils from "./utils.js";
-
-const RECEIVER_LABELS = ["Disabled", "Shoot", "Move", "Rotate"];
-const RECEIVER_SPRITE_SRCS = [
-  "/assets/sprites/split-cross.png",
-  "/assets/sprites/cannon-shot.png",
-  "/assets/sprites/move.png",
-  "/assets/sprites/cycle.png",
-];
-const RECEIVER_BG_COLORS = [
-  "rgba(40, 40, 40, 0.9)",
-  "rgba(50, 100, 155, 0.9)",
-  "rgba(50, 140, 90, 0.9)",
-  "rgba(155, 70, 85, 0.9)",
-];
-const _receiverImages = RECEIVER_SPRITE_SRCS.map(src => {
-  const img = new Image();
-  img.src = src;
-  return img;
-});
 
 class Canon extends Pawn {
   constructor(scene, board, x, z, camera, receiverType = 1) {
@@ -56,7 +37,7 @@ class Canon extends Pawn {
   _redrawSpriteCanvas() {
     const ctx = this._spriteCtx;
     ctx.clearRect(0, 0, 64, 64);
-    ctx.fillStyle = RECEIVER_BG_COLORS[this.receiverType];
+    ctx.fillStyle = SIGNAL_BG_COLORS[this.receiverType];
     ctx.beginPath();
     ctx.arc(32, 32, 26, 0, Math.PI * 2);
     ctx.fill();
@@ -64,7 +45,7 @@ class Canon extends Pawn {
     ctx.lineWidth = 4;
     ctx.stroke();
 
-    const img = _receiverImages[this.receiverType];
+    const img = signalImages[this.receiverType];
     const drawImg = () => {
       ctx.save();
       ctx.beginPath();
@@ -82,7 +63,7 @@ class Canon extends Pawn {
   }
 
   _updateReceiverVisuals() {
-    this.description = `Receiver: ${RECEIVER_LABELS[this.receiverType]}`;
+    this.description = `Receiver: ${SIGNAL_LABELS[this.receiverType]}`;
     this._redrawSpriteCanvas();
   }
 

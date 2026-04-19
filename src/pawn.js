@@ -1,5 +1,25 @@
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 
+export const SIGNAL_LABELS = ["Disabled", "Shoot", "Move", "Rotate"];
+export const SIGNAL_COLORS = [0x888888, 0x55ddff, 0x55ffaa, 0xff7799];
+export const SIGNAL_SPRITE_SRCS = [
+  "/assets/sprites/split-cross.png",
+  "/assets/sprites/cannon-shot.png",
+  "/assets/sprites/move.png",
+  "/assets/sprites/cycle.png",
+];
+export const SIGNAL_BG_COLORS = [
+  "rgba(40, 40, 40, 0.9)",
+  "rgba(50, 100, 155, 0.9)",
+  "rgba(50, 140, 90, 0.9)",
+  "rgba(155, 70, 85, 0.9)",
+];
+export const signalImages = SIGNAL_SPRITE_SRCS.map(src => {
+  const img = new Image();
+  img.src = src;
+  return img;
+});
+
 class Pawn {
   constructor(board, modelPath, x, y) {
     this.board = board;

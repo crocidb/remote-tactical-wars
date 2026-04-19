@@ -1,6 +1,6 @@
 import * as THREE from "three";
 
-import Pawn from "./pawn.js";
+import Pawn, { SIGNAL_LABELS, SIGNAL_COLORS, SIGNAL_BG_COLORS, signalImages } from "./pawn.js";
 import Time from "./time.js";
 import RingSignal from "./ringsignal.js";
 import ParticleSystem from "./particles.js";
@@ -18,26 +18,15 @@ class Emitter extends Pawn {
 
     this._spriteWorldPos = new THREE.Vector3();
 
-    const canvas = document.createElement("canvas");
-    canvas.width = 64;
-    canvas.height = 64;
-    const ctx = canvas.getContext("2d");
-    ctx.fillStyle = "rgba(35, 75,75,0.9)";
-    ctx.beginPath();
-    ctx.arc(32, 32, 26, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.strokeStyle = "rgba(150,255,255,1)";
-    ctx.lineWidth = 4;
-    ctx.stroke();
-    ctx.fillStyle = "#fff";
-    ctx.font = "bold 32px sans-serif";
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    ctx.fillText("⚡", 32, 34);
+    this._spriteCanvas = document.createElement("canvas");
+    this._spriteCanvas.width = 64;
+    this._spriteCanvas.height = 64;
+    this._spriteCtx = this._spriteCanvas.getContext("2d");
 
-    const texture = new THREE.CanvasTexture(canvas);
-    const mat = new THREE.SpriteMaterial({ map: texture, depthTest: false });
+    this.spriteTexture = new THREE.CanvasTexture(this._spriteCanvas);
+    const mat = new THREE.SpriteMaterial({ map: this.spriteTexture, depthTest: false });
     this.sprite = new THREE.Sprite(mat);
+    this._updateEmitterVisuals();
     this.sprite.position.set(0, -0.1, 0);
     this.sprite.renderOrder = 999;
 
@@ -48,7 +37,7 @@ class Emitter extends Pawn {
           minRadius: 0.05,
           maxRadius: 10.0,
           speed: 5.5,
-          color: 0x55ffff,
+          color: SIGNAL_COLORS[this.type],
         }),
       );
     }
@@ -56,6 +45,39 @@ class Emitter extends Pawn {
     this.initialScaleY = 0.6;
     this.rateCounter = 0;
     this.flashIntensity = 0;
+  }
+
+  _redrawSpriteCanvas() {
+    const ctx = this._spriteCtx;
+    ctx.clearRect(0, 0, 64, 64);
+    ctx.fillStyle = SIGNAL_BG_COLORS[this.type];
+    ctx.beginPath();
+    ctx.arc(32, 32, 26, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = "rgba(150,255,255,1)";
+    ctx.lineWidth = 4;
+    ctx.stroke();
+
+    const img = signalImages[this.type];
+    const drawImg = () => {
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(32, 32, 22, 0, Math.PI * 2);
+      ctx.clip();
+      ctx.drawImage(img, 12, 12, 40, 40);
+      ctx.restore();
+      this.spriteTexture.needsUpdate = true;
+    };
+    if (img.complete) {
+      drawImg();
+    } else {
+      img.onload = drawImg;
+    }
+  }
+
+  _updateEmitterVisuals() {
+    this.description = `Emitter: ${SIGNAL_LABELS[this.type]}`;
+    this._redrawSpriteCanvas();
   }
 
   _getRing() {
@@ -73,10 +95,10 @@ class Emitter extends Pawn {
     if (ring == null) return;
 
     if (this.mesh != null) {
-      ParticleSystem.instance.burst(this.mesh.position, 30, 1.9, 1.0, 0x55ffff);
+      ParticleSystem.instance.burst(this.mesh.position, 30, 1.9, 1.0, SIGNAL_COLORS[this.type]);
       ring.emit(this.mesh.position.clone().add(new THREE.Vector3(0, 0.5, 0)));
       this.mesh.scale.y = 0.8;
-      this.flashIntensity = 0.4;
+      this.flashIntensity = 1.2;
     }
   }
 
@@ -108,13 +130,10 @@ class Emitter extends Pawn {
         0,
         Time.instance.dt() * 10.0,
       );
+      const signalColor = new THREE.Color(SIGNAL_COLORS[this.type]);
       this.mesh.traverse((child) => {
         if (child.isMesh && child.material) {
-          child.material.emissive = new THREE.Color(
-            0,
-            this.flashIntensity,
-            this.flashIntensity,
-          );
+          child.material.emissive = signalColor.clone().multiplyScalar(this.flashIntensity);
         }
       });
 
