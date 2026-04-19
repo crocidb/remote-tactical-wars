@@ -65,10 +65,10 @@ class GameScene {
 
     this.pawns = [];
     for (const e of this.currentLevel.emitters) {
-      this.pawns.push(new Emitter(this.scene, this.board, e.x, e.y, e.type, e.rate));
+      this.pawns.push(new Emitter(this.scene, this.board, e.x, e.y, e.type, e.rate, this.camera));
     }
     for (const c of this.currentLevel.canons) {
-      this.pawns.push(new Canon(this.scene, this.board, c.x, c.y));
+      this.pawns.push(new Canon(this.scene, this.board, c.x, c.y, this.camera));
     }
 
     this.raycaster = new THREE.Raycaster();

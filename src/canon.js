@@ -8,14 +8,40 @@ import ParticleSystem from "./particles.js"
 import * as utils from "./utils.js";
 
 class Canon extends Pawn {
-  constructor(scene, board, x, z) {
+  constructor(scene, board, x, z, camera) {
     super(board, "/assets/canon.glb", x, z);
     this.scene = scene;
+    this.camera = camera;
     this.name = "Canon";
     this.description = "Click to deactivate";
 
     this.initialScaleY = 0.6;
     this.flashIntensity = 0;
+
+    this._spriteWorldPos = new THREE.Vector3();
+
+    const canvas = document.createElement("canvas");
+    canvas.width = 64;
+    canvas.height = 64;
+    const ctx = canvas.getContext("2d");
+    ctx.fillStyle = "rgba(155,70,85,0.9)";
+    ctx.beginPath();
+    ctx.arc(32, 32, 26, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = "rgba(255,220,150,1)";
+    ctx.lineWidth = 4;
+    ctx.stroke();
+    ctx.fillStyle = "#fff";
+    ctx.font = "bold 32px sans-serif";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText("⚡", 32, 34);
+
+    const texture = new THREE.CanvasTexture(canvas);
+    const mat = new THREE.SpriteMaterial({ map: texture, depthTest: false });
+    this.sprite = new THREE.Sprite(mat);
+    this.sprite.position.set(0, -.1, 0);
+    this.sprite.renderOrder = 999;
   }
 
   action() {
@@ -42,6 +68,11 @@ class Canon extends Pawn {
   _update() {
     if (!this.mesh) return;
 
+    if (!this._spriteAttached) {
+      this.mesh.add(this.sprite);
+      this._spriteAttached = true;
+    }
+
     this.mesh.scale.y = utils.lerp(this.mesh.scale.y, this.initialScaleY, Time.instance.dt() * 9.0);
 
     this.flashIntensity = utils.lerp(this.flashIntensity, 0, Time.instance.dt() * 9.0);
@@ -50,6 +81,13 @@ class Canon extends Pawn {
         child.material.emissive = new THREE.Color(this.flashIntensity, this.flashIntensity, this.flashIntensity * .8);
       }
     });
+
+    if (this.camera) {
+      this.sprite.getWorldPosition(this._spriteWorldPos);
+      const dist = this.camera.position.distanceTo(this._spriteWorldPos);
+      const k = 0.045;
+      this.sprite.scale.set(dist * k, dist * k, 1);
+    }
   }
 }
 
