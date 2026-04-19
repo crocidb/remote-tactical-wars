@@ -52,9 +52,9 @@ const LEVEL_DATA = [
       { x: 4, y: 1, receiver: 0, orientation: 0 },
     ],
     emitters: [
-      { x: 0, y: 0, type: 1, rate: 1.8 },
-      { x: 3, y: 0, type: 3, rate: 3.0 },
-      { x: 6, y: 0, type: 2, rate: 2.0 },
+      { x: 0, y: 0, type: 3, rate: 3.8 },
+      { x: 3, y: 0, type: 1, rate: 2.8 },
+      { x: 6, y: 0, type: 2, rate: 3.8 },
     ],
     enemyCanons: [
       { x: 0, y: 3, receiver: 1, orientation: 1 },

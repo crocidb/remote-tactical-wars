@@ -67,8 +67,8 @@ class GameScene {
     this.ambientLight = new THREE.AmbientLight(0xffffff, 0.25);
     this.scene.add(this.ambientLight);
 
-    this.sun = new THREE.DirectionalLight(0xffffff, 1.0);
-    this.sun.position.set(6, 10, 4);
+    this.sun = new THREE.DirectionalLight(0xffffee, 1.1);
+    this.sun.position.set(-8, 12, -6);
     this.sun.castShadow = true;
     this.sun.shadow.mapSize.set(2048, 2048);
     this.sun.shadow.camera.left = -8;
