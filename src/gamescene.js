@@ -342,6 +342,7 @@ class GameScene {
           utils.play("destroy");
           pawn.mesh.removeFromParent();
         }
+        if (pawn.destroy) pawn.destroy();
         this.pawns.splice(i, 1);
         if (pawn === this._stronghold) {
           this._showWin();

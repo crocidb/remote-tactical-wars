@@ -131,6 +131,12 @@ class Emitter extends Pawn {
     }
   }
 
+  destroy() {
+    for (let ring of this.rings) {
+      ring.destroy();
+    }
+  }
+
   _update() {
     for (let ring of this.rings) {
       ring.update();

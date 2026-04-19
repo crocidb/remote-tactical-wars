@@ -1,3 +1,5 @@
 .bun/
 node_modules/
 bun.lock
+*.zip
+build/
