@@ -114,6 +114,7 @@ class Canon extends Pawn {
     this.receiverType = (this.receiverType + 1) % 4;
     this.flashIntensity = 10.0;
     this._flashColor.set(0xffffff);
+    utils.play("swap");
     ParticleSystem.instance.burst(this.mesh.position.clone().add(new THREE.Vector3(0, 0, -.6)), 50, 2.0, .1, 0xffffff);
     this._updateReceiverVisuals();
   }
@@ -128,6 +129,8 @@ class Canon extends Pawn {
     const nx = this.x + dx;
     const ny = this.y + dy;
 
+    utils.play("move");
+
     if (nx < 0 || nx >= this.board.width || ny < 0 || ny >= this.board.height) return;
     if (pawns && pawns.some(p => p !== this && p.x === nx && p.y === ny)) return;
 
@@ -139,6 +142,7 @@ class Canon extends Pawn {
     this.orientation = (this.orientation + 1) % 4;
     this.flashIntensity = 1.5;
     this._flashColor.set(0xffdd44);
+    utils.play("rotate");
     this.mesh.scale.y = 1.2;
     if (this.mesh) this.mesh.rotation.y = ORIENTATIONS[this.orientation].rotY;
   }
@@ -147,6 +151,9 @@ class Canon extends Pawn {
     if (!this.mesh) return;
 
     const { velocity, burstOffset } = ORIENTATIONS[this.orientation];
+
+    utils.play("shoot_deep");
+    utils.play("shoot");
 
     const worldPos = new THREE.Vector3();
     this.mesh.getWorldPosition(worldPos);

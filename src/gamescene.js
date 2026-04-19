@@ -12,6 +12,7 @@ import Bullet from "./bullet.js";
 import LEVEL_DATA from "./level.js";
 import Time from "./time.js";
 import MusicManager from "./music.js";
+import * as utils from "./utils.js";
 
 class GameScene {
   constructor(canvas, levelIndex = 0, showHelp = true) {
@@ -265,6 +266,7 @@ class GameScene {
           if (ring.radius >= dist) {
             ring.triggered.add(canon);
             if (canon.receiverType === emitter.type) {
+              utils.play("absorb");
               if (emitter.type === 1) {
                 canon.fire();
               } else if (emitter.type === 2) {
@@ -305,6 +307,7 @@ class GameScene {
         if (pawn.mesh) {
           ParticleSystem.instance.burst(pawn.mesh.position.clone(), 180, 2.0, .1, 0xff6600);
           this.shakeCamera(0.3, 0.1);
+          utils.play("destroy");
           pawn.mesh.removeFromParent();
         }
         this.pawns.splice(i, 1);

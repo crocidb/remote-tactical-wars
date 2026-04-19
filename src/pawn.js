@@ -76,6 +76,7 @@ class Pawn {
     this.life = Math.max(0, this.life - amount);
     this.flashIntensity = 1.5;
     this._flashColor.set(0xff2200);
+    utils.play("hit");
     if (this.mesh) this.mesh.scale.y = 1.0;
     if (this._redrawSpriteCanvas) this._redrawSpriteCanvas();
   }

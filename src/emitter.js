@@ -120,6 +120,7 @@ class Emitter extends Pawn {
   emit() {
     let ring = this._getRing();
     if (ring == null) return;
+    utils.play("emit" + (this.type - 1));
 
     if (this.mesh != null) {
       ParticleSystem.instance.burst(this.mesh.position, 30, 1.9, 1.0, SIGNAL_COLORS[this.type]);
