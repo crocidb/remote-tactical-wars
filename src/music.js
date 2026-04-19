@@ -24,7 +24,7 @@ class MusicManager {
     });
 
     this._sound = new Pizzicato.Sound(
-      { source: 'file', options: { path: 'assets/music/music.ogg', loop: true } },
+      { source: 'file', options: { path: 'assets/music/remote-tactical-wars.ogg', loop: true } },
       () => { this._attemptPlay(); }
     );
   }
