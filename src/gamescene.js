@@ -31,7 +31,7 @@ class GameScene {
     this._hudHelp = document.getElementById("hud_help");
     this._hud = document.getElementById("hud");
     this._helpTitle = document.querySelector("#hud_help h2");
-    this._helpDescription = document.querySelector("#hud_help > p");
+    this._helpDescription = document.querySelector("#hud_help_panel > p");
 
     this.hudLevelTitle.innerHTML = this.currentLevel.name;
     this._helpTitle.innerHTML = this.currentLevel.name;
@@ -166,15 +166,19 @@ class GameScene {
     this._onRestart = () => System.instance.setScene(() => new GameScene(this.canvas));
     this._onHelp = () => this._toggleHelp();
 
+    this._btnHelpClose = document.getElementById("btn_help_close");
+
     this._btnPlayPause.addEventListener("click", this._onPlayPause);
     document.getElementById("btn_restart").addEventListener("click", this._onRestart);
     this._btnHelp.addEventListener("click", this._onHelp);
+    this._btnHelpClose.addEventListener("click", this._onHelp);
   }
 
   exit() {
     this._btnPlayPause.removeEventListener("click", this._onPlayPause);
     document.getElementById("btn_restart").removeEventListener("click", this._onRestart);
     this._btnHelp.removeEventListener("click", this._onHelp);
+    this._btnHelpClose.removeEventListener("click", this._onHelp);
     window.removeEventListener("mousemove", this._onMouseMove);
     window.removeEventListener("click", this._onClick);
 
