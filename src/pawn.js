@@ -19,6 +19,7 @@ export const SIGNAL_BG_COLORS = [
 ];
 export const signalImages = SIGNAL_SPRITE_SRCS.map(src => {
   const img = new Image();
+  img.crossOrigin = "anonymous";
   img.src = src;
   return img;
 });
