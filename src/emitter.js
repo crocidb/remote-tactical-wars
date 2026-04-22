@@ -37,7 +37,7 @@ class Emitter extends Pawn {
       this.rings.push(
         new RingSignal(scene, {
           minRadius: 0.05,
-          maxRadius: 10.0,
+          maxRadius: 12.0,
           speed: 5.5,
           color: SIGNAL_COLORS[this.type],
         }),

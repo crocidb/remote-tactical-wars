@@ -48,7 +48,7 @@ const LEVEL_DATA = [
     ],
     emitters: [
       { x: 0, y: 0, type: 3, rate: 3.8 },
-      { x: 3, y: 0, type: 1, rate: 2.8 },
+      { x: 3, y: 0, type: 1, rate: 1.5 },
       { x: 6, y: 0, type: 2, rate: 3.8 },
     ],
     enemyCanons: [
