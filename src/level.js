@@ -83,8 +83,8 @@ const LEVEL_DATA = [
       { x: 0, y: 0, type: 1, rate: 1.8 },
       { x: 1, y: 0, type: 1, rate: 1.8 },
       { x: 2, y: 0, type: 1, rate: 1.8 },
-      { x: 4, y: 0, type: 2, rate: 3.8 },
-      { x: 5, y: 0, type: 3, rate: 3.8 },
+      { x: 4, y: 0, type: 2, rate: 1.9 },
+      { x: 5, y: 0, type: 3, rate: 1.9 },
     ],
     enemyCanons: [
       { x: 5, y: 2, receiver: 1, orientation: 3 },
